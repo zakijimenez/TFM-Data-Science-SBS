@@ -1,1 +1,44 @@
-print("Hello world")
+#Import relevant Library
+import pandas as pd
+
+#Load and plot the data
+raw_data = pd.read_csv("/content/Train.csv")
+raw_data.head()
+
+raw_data.describe()
+
+#Clean the data
+raw_data.isnull().sum()
+raw_data_no_null = raw_data.dropna(axis=0)
+(raw_data.count()-raw_data_no_null.count())/raw_data.count()*100
+
+#Dropping non meaningfull variables
+raw_data_no_null.columns
+clean_data = raw_data_no_null.drop(raw_data_no_null[['ID','Var_1','Segmentation']],axis=1)
+clean_data_with_var = raw_data_no_null.drop(raw_data_no_null[['ID','Segmentation']],axis=1)
+clean_data.head()
+
+#Get dummies
+raw_data_dummies = pd.get_dummies(raw_data_no_null,drop_first=True)
+raw_data_dummies.columns
+
+#Cluster
+kmeans = KMeans(n_clusters=4, random_state=0)
+kmeans.fit(data_scaled)
+
+#Plot the data (Confirm clustering results)
+identified_clusters = kmeans.fit_predict(data_scaled)
+identified_clusters
+data_with_clusters = clean_data.copy()
+data_with_clusters['Cluster'] = identified_clusters
+data_with_clusters
+
+raw_data
+
+data_with_clusters['Cluster'] = data_with_clusters['Cluster'].astype(str).replace('0', 'A')
+data_with_clusters['Cluster'] = data_with_clusters['Cluster'].astype(str).replace('1', 'B')
+data_with_clusters['Cluster'] = data_with_clusters['Cluster'].astype(str).replace('2', 'C')
+data_with_clusters['Cluster'] = data_with_clusters['Cluster'].astype(str).replace('3', 'D')
+
+data_with_clusters.head()
+
